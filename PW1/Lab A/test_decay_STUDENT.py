@@ -1,9 +1,6 @@
 """
 Tests for the decay simulation.
-
-One complete test is given as a model. Add the two tests described in the
-lab handout (a negative-rate test, and a test against the analytical law).
-Run with:  pytest -v
+(keep your original docstring)
 """
 
 import numpy as np
@@ -16,12 +13,21 @@ def test_starts_at_N0():
     assert simulate(1000, 0.4)[0] == 1000
 
 
-# TODO 1: test_rejects_negative_rate
-#   Check that calling simulate(...) with a negative lam raises a ValueError.
-#   Which pytest tool checks that an error is raised?
+def test_rejects_negative_rate():
+    with pytest.raises(ValueError):
+        simulate(1000, -0.4)
 
 
-# TODO 2: test_matches_law
-#   Check that the simulation's AVERAGE over many seeds is close to the
-#   physical law  N0 * exp(-lam * t).
-#   Which pytest tool compares floating-point values with a tolerance?
+def test_matches_law():
+    N0 = 1000
+    lam = 0.4
+    dt = 0.05
+    index = 20                 # position in the output array
+    t = index * dt             # real time = 20 * 0.05 = 1.0
+    runs = 200
+
+    finals = [simulate(N0, lam, dt=dt, seed=s)[index] for s in range(runs)]
+    average = np.mean(finals)
+    expected = N0 * np.exp(-lam * t)
+
+    assert average == pytest.approx(expected, rel=0.02)
