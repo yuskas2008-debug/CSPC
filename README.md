@@ -28,3 +28,15 @@ Create the environment for a given lab:
 - The NumPy version was about ten thousand times faster than the loop. The loop makes one random draw for every atom at every time step, while NumPy makes one binomial draw per step for the whole sample.
 - The tests showed the simulation behaves correctly: it starts at N0, rejects a negative rate, and the average over many seeds matches N0*exp(-lam*t).
 - Using Git branches, a remote on GitHub and an environment.yml file made the work organised and reproducible. (Add any problem you actually had, for example the GitHub token login or a conda error, or write that there were none.)
+
+
+## PW1 - Lab B: Data, Plotting, and Automation
+
+**What the data showed:**
+- The observed count starts at N0 = 5000 at t = 0 and falls quickly at first, then more slowly, reaching almost zero by t = 15-20. This is the shape of exponential decay.
+
+**Observed vs analytical law:**
+- The observed points follow the analytical curve N0*exp(-0.3 t) closely. Both start at 5000, drop at the same rate, and flatten out near zero at the same time. For example, at t = 5 the curve gives about 1100 and the observed value is also about 1100. The small differences are random scatter, which is expected because decay is a random process. So the data matches the law with lambda = 0.3.
+
+**Snakemake pipeline:**
+- The Snakefile has one rule that rebuilds figure.png from decay_observed.csv and plot.py by running plot.py. It only reruns when an input is newer than the output, and otherwise reports that nothing needs doing.
