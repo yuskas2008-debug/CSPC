@@ -46,7 +46,10 @@ Create the environment for a given lab:
 **Mean acceleration measured:** -8.58 m/s² (std = 28.7 m/s²). The sign and size are consistent
 with free fall at -9.81, but the noise pulls the mean away from the exact value.
 
-**Why the acceleration is noisy:** <your sentence from Part 3>
+Why the acceleration is noisy: A derivative divides the difference between neighbouring
+measurements by a small time step (0.1 s), so small random errors in the position get
+magnified; doing this twice magnifies them again, which is why the acceleration is far
+noisier than the position.
 
 **What integrating back showed:** integrating the noisy acceleration twice recovered the
 position to within 0.78 m of the original (max difference), showing that integration
