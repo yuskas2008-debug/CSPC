@@ -40,3 +40,16 @@ Create the environment for a given lab:
 
 **Snakemake pipeline:**
 - The Snakefile has one rule that rebuilds figure.png from decay_observed.csv and plot.py by running plot.py. It only reruns when an input is newer than the output, and otherwise reports that nothing needs doing.
+
+## PW2 --- Lab A
+
+**Mean acceleration measured:** -8.58 m/s² (std = 28.7 m/s²). The sign and size are consistent
+with free fall at -9.81, but the noise pulls the mean away from the exact value.
+
+**Why the acceleration is noisy:** <your sentence from Part 3>
+
+**What integrating back showed:** integrating the noisy acceleration twice recovered the
+position to within 0.78 m of the original (max difference), showing that integration
+suppresses noise while differentiation amplifies it.
+
+![motion](PW2/Lab%20A/motion.png)

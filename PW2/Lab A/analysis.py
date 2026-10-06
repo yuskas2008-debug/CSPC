@@ -14,20 +14,39 @@ import matplotlib.pyplot as plt
 from scipy.integrate import cumulative_trapezoid
 
 # TODO 1: read freefall.csv
-data = np.loadtxt("freefall.csv", delimiter=",", skiprows=1)  # delimiter="," = columns split by commas
-                                                              # skiprows=1 = skip the "time,y" header line
-t = data[:, 0]   # all rows, column 0 = time
-y = data[:, 1]   # all rows, column 1 = height
+data = np.loadtxt("freefall.csv", delimiter=",", skiprows=1)
+
+t = data[:, 0]  
+y = data[:, 1]  
 
 # TODO 2: differentiate twice
-v = np.gradient(y, t)   # velocity = rate of change of position
-a = np.gradient(v, t)   # acceleration = rate of change of velocity
+v = np.gradient(y, t)   
+a = np.gradient(v, t)  
 print("Mean acceleration:", a.mean())
 print("Std of acceleration:", a.std())
 
-# TODO 3: integrate a back up to recover velocity and position
-#         (hint: cumulative_trapezoid(a, t, initial=0) + v[0], then again)
+## TODO 3: integrate back up
+v_rec = cumulative_trapezoid(a, t, initial=0) + v[0]      
+y_rec = cumulative_trapezoid(v_rec, t, initial=0) + y[0]  
 
-# TODO 4: make a figure with 3 stacked panels: position, velocity, acceleration
-#         vs time. Mark the true -9.81 line on the acceleration panel.
-#         Save it as motion.png
+max_diff = np.max(np.abs(y_rec - y))
+print("Max |y_rec - y|:", max_diff, "m")
+
+# TODO 4: three stacked panels sharing the time axis
+fig, axes = plt.subplots(3, 1, sharex=True, figsize=(8, 9))
+
+axes[0].plot(t, y)
+axes[0].set_ylabel("Position (m)")
+
+axes[1].plot(t, v)
+axes[1].set_ylabel("Velocity (m/s)")
+
+axes[2].plot(t, a, label="measured acceleration")
+axes[2].axhline(-9.81, linestyle="--", color="red", label="-9.81 m/s²")
+axes[2].set_ylabel("Acceleration (m/s²)")
+axes[2].set_xlabel("Time (s)")
+axes[2].legend()
+
+fig.tight_layout()
+fig.savefig("motion.png", dpi=150)
+plt.show()
