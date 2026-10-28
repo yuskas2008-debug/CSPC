@@ -92,4 +92,3 @@ suppresses noise while differentiation amplifies it.
 **Conclusion:** **benzene is the real cause.** Its association survives (and strengthens) when pollution is held roughly constant, while cadmium's collapses: cadmium only looked guilty because it tracks pollution, which drives malignancy. The small leftover cadmium correlation is because each slice still lets pollution vary a little.
 
 ![naive](PW3/naive_chemicals.png)
-![controlled](PW3/controlled_chemicals.png)
