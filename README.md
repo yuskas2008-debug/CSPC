@@ -56,3 +56,40 @@ position to within 0.78 m of the original (max difference), showing that integra
 suppresses noise while differentiation amplifies it.
 
 ![motion](PW2/Lab%20A/motion.png)
+## PW3 --- Data, Distributions, Testing, and Causation
+
+**Data:** Heart Disease (Cleveland), 303 patients, source UCI / Kaggle; and the synthetic `chemicals_cancer.csv`, 1000 patients.
+
+### Session 1
+
+**Shapes:** `age` is roughly bell-shaped with a slight left skew; `chol` is strongly right-skewed with outliers (max 564); `trestbps` is right-skewed; `thalach` is left-skewed (long tail of low values).
+
+**Normality verdicts:** Shapiro-Wilk rejects normality for all four (p = 0.006, 6e-9, 2e-6, 7e-5). With n = 303 the test is very sensitive, so I also used Q-Q plots and skewness: `age` and `thalach` are only mildly non-normal, while `chol` (skew 1.13, kurtosis 4.4) and `trestbps` are clearly non-normal. I treated all four as not normal and used non-parametric methods in Session 2.
+
+![distributions](PW3/distributions.png)
+![qqplots](PW3/qqplots.png)
+
+### Session 2: Heart data
+
+**Heart rate, disease vs healthy:** I used the Mann-Whitney U test because thalach is not normal (U = 5806.5, p = 1.9e-13; Welch's t-test agrees, p = 9e-14). Heart-disease patients reach a significantly lower maximum heart rate.
+
+**Means and uncertainty:** disease 139.3 +/- 1.9 (SEM), healthy 158.4 +/- 1.5 (SEM). The means are about 7 standard errors apart and the error bars do not overlap, so the picture agrees with the test.
+
+![thalach means](PW3/thalach_means.png)
+
+**Age vs thalach:** Pearson r = -0.39, Spearman rho = -0.39. Older patients tend to have a lower maximum heart rate, a moderate negative association (not proof of cause).
+
+![age vs thalach](PW3/age_vs_thalach.png)
+
+**Bonus:** entropy of `target` = 0.995 bits (max 1), almost perfectly balanced and hard to guess; `sex` = 0.905 bits (68% / 32%), more lopsided.
+
+### Chemical mystery
+
+**Naive conclusion:** cadmium (r = 0.88) looks far more strongly linked to malignancy than benzene (r = 0.39), so cadmium appears to be the cause.
+
+**Looking again:** `pollution_index` correlates with cadmium (0.98) and malignancy (0.90) but not benzene (0.05), so it could be a confounder. Restricting to patients with similar pollution (slices 40-55, 55-70, 70-85) gives benzene r = 0.69 / 0.78 / 0.80, but cadmium only r = 0.14 / 0.20 / 0.20.
+
+**Conclusion:** **benzene is the real cause.** Its association survives (and strengthens) when pollution is held roughly constant, while cadmium's collapses: cadmium only looked guilty because it tracks pollution, which drives malignancy. The small leftover cadmium correlation is because each slice still lets pollution vary a little.
+
+![naive](PW3/naive_chemicals.png)
+![controlled](PW3/controlled_chemicals.png)
